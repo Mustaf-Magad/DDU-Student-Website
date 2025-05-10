@@ -2,7 +2,7 @@ document.getElementById("searchButton").addEventListener("click", function() {
     const inputName = document.getElementById("studentNameInput").value.trim();
     const studentInfoDiv = document.getElementById("studentInfo");
 
-    // Clear previous results
+    
     studentInfoDiv.innerHTML = "";
 
     if (!inputName) {
@@ -10,13 +10,21 @@ document.getElementById("searchButton").addEventListener("click", function() {
         return;
     }
 
+    const inputParts = inputName.toLowerCase().split(/\s+/);
     
-
-    // Find student (case-insensitive)
-    const student = mockStudents.find(s =>
-        s.firstName.toLowerCase().includes(inputName.toLowerCase()) ||
-        s.lastName.toLowerCase().includes(inputName.toLowerCase())
-    );
+    const student = mockStudents.find(s => {
+        
+        const studentNameParts = [
+            s.firstName.toLowerCase(),
+            s.middleName.toLowerCase(),
+            s.lastName.toLowerCase()
+        ];
+        
+        
+        return inputParts.every(part => 
+            studentNameParts.some(namePart => namePart.includes(part))
+        );
+    });
 
     if (student) {
         studentInfoDiv.innerHTML = `
